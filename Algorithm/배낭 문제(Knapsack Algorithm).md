@@ -76,7 +76,7 @@ print(knapsack(P, wt, val, N))
 
 ```python
 # n:보석의 종류/ limit:무게 제한
-# 보석 선택이 여러번 가능
+# 중복 x
 n, limit = map(int, input().split())
 
 # dy리스트의 인덱스 = 인덱스 만큼의 무게에서 갖는 최대한의 가치
@@ -87,7 +87,29 @@ for i in range(n):
     weight, value = map(int, input().split())
     # 선택한 물건의 가치를 포함하는 것을 적용한다고 가정하기 때문에 for문의 시작이 weight임
     # => 안그러면 음수 index
+    # weight 까지 돌아야 하므로 weight -1
     for j in range(limit, weight-1, -1):
+        # weight를 포함했다고 가정하고 value를 추가한 상태에서 순환
+        # dy[j]: 기존에 저장된 값
+        # j - weight : weight에 해당하는 값을 담아야하므로 전체 무게에서 weight 만큼의 여유공간 확보
+        # + value : 확보한 여유공간까지 값 + weight의 값 
+        dy[j] = max(dy[j], dy[j-weight] + value)
+
+print(dy[limit])
+```
+
+```python
+# n:보석의 종류/ limit:무게 제한
+# 중복 선택이 가능
+n, limit = map(int, input().split())
+
+# dy리스트의 인덱스 = 인덱스 만큼의 무게에서 갖는 최대한의 가치
+# limit + 1을 해줘야 인덱스 번호가 limit 까지 생긴다
+dy = [0] * (limit+1)
+
+for i in range(n):
+    weight, value = map(int, input().split()) 
+    for j in range(weight, m+1):
         # weight를 포함했다고 가정하고 value를 추가한 상태에서 순환
         # dy[j]: 기존에 저장된 값
         # j - weight : weight에 해당하는 값을 담아야하므로 전체 무게에서 weight 만큼의 여유공간 확보
