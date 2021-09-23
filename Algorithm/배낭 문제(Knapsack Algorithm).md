@@ -88,6 +88,7 @@ for i in range(n):
     # 선택한 물건의 가치를 포함하는 것을 적용한다고 가정하기 때문에 for문의 시작이 weight임
     # => 안그러면 음수 index
     # weight 까지 돌아야 하므로 weight -1
+    # 선택이 중복이 안될경우 거꾸로 진행하면 앞에 값을 참조하기 때문에 중복 선택 될 경우가 없다.
     for j in range(limit, weight-1, -1):
         # weight를 포함했다고 가정하고 value를 추가한 상태에서 순환
         # dy[j]: 기존에 저장된 값
