@@ -2,7 +2,7 @@
 
 ------
 
-### LIS (Longest Increasing Subsequence) : (순서를 유지한채 )가장 긴 증가하는 부분 수열
+## LIS (Longest Increasing Subsequence) : (순서를 유지한채 )가장 긴 증가하는 부분 수열
 
 **해결 방법**
 
@@ -116,5 +116,85 @@ for i in range(n-1, -1, -1):
         order -= 1
 # tmp에 저장된 리스트는 역순이므로 reverse 하여 출력하도록 한다.
 print(*tmp[::-1])
+```
+
+## LCS(Longest Common Subsequence):  가장 긴 공통 부분수열을 구하는 알고리즘
+
+EX)
+
+A = "ACAYKP"
+
+B = "CAPCAK"
+
+일때, ACAK 가 된다. 
+
+문자가 일치하게 공백을 삽입하는 것과 같다고 볼 수 있다.
+
+```python
+# 비교할 문자열 입력
+word_1 = input()
+word_2 = input()
+
+n = len(word_1)
+m = len(word_2)
+
+word_1 = ' ' + word_1
+word_2 = ' ' + word_2
+
+# 각 문자열을 순회하면서 최대 LCS를 기록할 dp 생성
+dp = [[0]*(m+1) for _ in range(n+1)]
+
+# ABCD와 DEFC를 비교한다면
+# ABC, DEFC - 비교할때 같은 문자면 AB와 DEF 비교값에 1을 더한다.
+# ABC, DEF - 비교할때 다른 문자라면, ABC 와 DE 비교값과 AB와 DEF비교값중 큰거 저장
+
+for i in range(1, len(word_1)+1):
+    for j in range(1, len(word_2)+1):
+        # 두 문자열의 문자가 같은 경우 -> 두 문자가 같지 않았을때 LCS에서+1 (두 문자열의 공통으로 같은 문자를 만나기 때문)
+        if word_1[i-1] == word_2[j-1]:
+            dp[i][j] = dp[i-1][j-1] +1
+            
+        else:
+            dp[i][j] = max(dp[i][j-1], dp[i-1][j])
+print(dp[n][m])
+```
+
+```python
+# LCS 의 길이와 그 문자열을 구하는 문제 ----> 역추적으로 구한다.
+
+a = input()
+b = input()
+n = len(a)
+m = len(b)
+a = " " + a
+b = " " + b
+d = [[0]*(m+1) for _ in range(n+1)]
+v = [[0]*(m+1) for _ in range(n+1)]
+# 3가지 경우가 나올 수 있으므로 1,2,3 으로 어떤게 나올지 체크 할 수 있게 이용
+for i in range(1, n+1):
+    for j in range(1, m+1):
+        if a[i] == b[j]:
+            d[i][j] = d[i-1][j-1] + 1
+            v[i][j] = 1
+        else:
+            if d[i-1][j] < d[i][j-1]:
+                d[i][j] = d[i][j-1]
+                v[i][j] = 2
+            else:
+                d[i][j] = d[i-1][j]
+                v[i][j] = 3
+print(d[n][m])
+ans = ""
+while n > 0 and m > 0:
+    if v[n][m] == 1:
+        ans += a[n]
+        n -= 1
+        m -= 1
+    elif v[n][m] == 2:
+        m -= 1
+    else:
+        n -= 1
+ # 역순이 들어 있을거기 때문에 반대로 출력
+print(ans[::-1])
 ```
 

@@ -20,7 +20,7 @@
 **문제 해결 아이디어**
 
 - 접두사 합(Prefix Sum): 배열의 맨 앞부터 특정 위치까지의 합을 미리 구해 놓은 것
-- N개의 수 위치 각가에 대하여 접두사 합을 계산하여 P에 저장한다
+- N개의 수 위치 각각에 대하여 접두사 합을 계산하여 P에 저장한다
 - 매 M개의 쿼리 정보를 확인할 때 구간 합은 P[Right] - P[Left-1] 이다
 
 ```python
@@ -34,7 +34,7 @@ prefix_sum = [0]
 for i in data:
     sum_value += i
     prefix_sum.append(sum_value)
-    
+# prefix_sum = [0, 10, 30, 60, 100, 150]
 # 구간 합 계산 (세 번째 수부터 네 번째 수까지)
 left = 3
 right = 4

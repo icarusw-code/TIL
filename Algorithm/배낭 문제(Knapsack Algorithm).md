@@ -48,35 +48,28 @@ $$
 [https://gsmesie692.tistory.com/113]: 
 
 ```python
-def knapsack(W, wt, val, n):  # W: 배낭의 무게한도, wt: 각 보석의 무게, val: 각 보석의 가격, n: 보석의 수
-    P = [[0 for x in range(W+1)] for x in range(n+1)]  # DP를 위한 2차원 리스트 초기화
-    for i in range(n+1):
-        for w in range(W+1):  # 각 칸을 돌면서
-            if i==0 or w==0:  # 0번째 행/열은 0으로 세팅
-                P[i][w] = 0
-            elif wt[i-1] <= w:  # 점화식을 그대로 프로그램으로
-                P[i][w] = max(val[i-1]+P[i-1][w-wt[i-1]], P[i-1][w])  # max 함수 사용하여 큰 것 선택
-            else:
-                P[i][w] = P[i-1][w]
-    return P[n][W]
+n, limit = map(int, input().split())
+dp = [[0] * (limit+1) for _ in range(n+1)]
 
-wt = []
-val = []
-N, P = map(int, sys.stdin.readline().strip().split())
-for i in range(N):
-    w, v = map(int, sys.stdin.readline().strip().split())
-    wt.append(w)
-    val.append(v)
-print(knapsack(P, wt, val, N))
+for i in range(1, n+1):
+    weight, value = map(int, input().split())
+    for j in range(1, limit+1):
+        # 위에 있던 값을 그대로 내림
+        if j < weight:
+            dp[i][j] = dp[i-1][j]
+        else:
+            dp[i][j] = max(dp[i-1][j], dp[i-1][j-weight] + value)
+            
+print(dp[n][weight])
 ```
 
 **2) 1차원 해결(시간이 짧게 걸림)**
 
-- limit 뒤에서 부터 시작
+- limit 뒤에서 부터 시작(가장 최적화!!!)
 
 ```python
 # n:보석의 종류/ limit:무게 제한
-# 중복 x
+# 중복 x(물건이 1개씩 있는경우)
 n, limit = map(int, input().split())
 
 # dy리스트의 인덱스 = 인덱스 만큼의 무게에서 갖는 최대한의 가치
@@ -101,7 +94,7 @@ print(dy[limit])
 
 ```python
 # n:보석의 종류/ limit:무게 제한
-# 중복 선택이 가능
+# 중복 선택이 가능(물건을 여러개 선택 가능)
 n, limit = map(int, input().split())
 
 # dy리스트의 인덱스 = 인덱스 만큼의 무게에서 갖는 최대한의 가치
@@ -110,7 +103,7 @@ dy = [0] * (limit+1)
 
 for i in range(n):
     weight, value = map(int, input().split()) 
-    for j in range(weight, m+1):
+    for j in range(weight, limit+1):
         # weight를 포함했다고 가정하고 value를 추가한 상태에서 순환
         # dy[j]: 기존에 저장된 값
         # j - weight : weight에 해당하는 값을 담아야하므로 전체 무게에서 weight 만큼의 여유공간 확보
